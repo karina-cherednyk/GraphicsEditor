@@ -5,6 +5,10 @@
  */
 package graphicredactor;
 //first commit
+
+import java.awt.Color;
+import javax.swing.JColorChooser;
+
 /**
  *
  * @author k256
@@ -45,17 +49,22 @@ public class GraphicRedactor extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JToolBar.Separator();
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
+        colSample = new javax.swing.JPanel();
         jSeparator4 = new javax.swing.JToolBar.Separator();
         jPanel5 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jSpinner2 = new javax.swing.JSpinner();
+        strokeSpinner = new javax.swing.JSpinner();
         jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jComboBox2 = new javax.swing.JComboBox();
         jLabel4 = new javax.swing.JLabel();
         jComboBox3 = new javax.swing.JComboBox();
         jToolBar2 = new javax.swing.JToolBar();
+        circleBut = new javax.swing.JButton();
+        rectBut = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
+        fillBox = new javax.swing.JCheckBox();
+        canvas = new Canvas();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -97,7 +106,7 @@ public class GraphicRedactor extends javax.swing.JFrame {
                 .addComponent(jButton10)
                 .addGap(18, 18, 18)
                 .addComponent(jButton9)
-                .addContainerGap(839, Short.MAX_VALUE))
+                .addContainerGap(835, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -151,6 +160,11 @@ public class GraphicRedactor extends javax.swing.JFrame {
         brushChooser.setName(""); // NOI18N
         brushChooser.setPreferredSize(new java.awt.Dimension(200, 100));
         brushChooser.setRenderer(new BrushChooserRenderer());
+        brushChooser.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                brushChooserItemStateChanged(evt);
+            }
+        });
         jToolBar1.add(brushChooser);
 
         jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/eraser.png"))); // NOI18N
@@ -185,13 +199,38 @@ public class GraphicRedactor extends javax.swing.JFrame {
         jButton8.setFocusable(false);
         jButton8.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton8.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButton8);
+
+        colSample.setBackground(new java.awt.Color(0, 0, 0));
+
+        javax.swing.GroupLayout colSampleLayout = new javax.swing.GroupLayout(colSample);
+        colSample.setLayout(colSampleLayout);
+        colSampleLayout.setHorizontalGroup(
+            colSampleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 11, Short.MAX_VALUE)
+        );
+        colSampleLayout.setVerticalGroup(
+            colSampleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 70, Short.MAX_VALUE)
+        );
+
+        jToolBar1.add(colSample);
         jToolBar1.add(jSeparator4);
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("line width");
 
-        jSpinner2.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
+        strokeSpinner.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
+        strokeSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                strokeSpinnerStateChanged(evt);
+            }
+        });
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/font.png"))); // NOI18N
 
@@ -213,8 +252,8 @@ public class GraphicRedactor extends javax.swing.JFrame {
                 .addGap(19, 19, 19)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
-                    .addComponent(jSpinner2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                    .addComponent(strokeSpinner))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -234,7 +273,7 @@ public class GraphicRedactor extends javax.swing.JFrame {
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(strokeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel3)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -253,30 +292,80 @@ public class GraphicRedactor extends javax.swing.JFrame {
 
         jToolBar2.setBackground(new java.awt.Color(153, 153, 153));
         jToolBar2.setRollover(true);
-        jTabbedPane2.addTab("View", jToolBar2);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+        circleBut.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        circleBut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/circle.png"))); // NOI18N
+        circleBut.setText("circle");
+        circleBut.setFocusable(false);
+        circleBut.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        circleBut.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        circleBut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                circleButActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(circleBut);
+
+        rectBut.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        rectBut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/rectangle.png"))); // NOI18N
+        rectBut.setText("rectangle");
+        rectBut.setFocusable(false);
+        rectBut.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rectBut.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        rectBut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rectButActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(rectBut);
+
+        fillBox.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        fillBox.setText("fill");
+        fillBox.setToolTipText("");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addComponent(fillBox)
+                .addContainerGap(909, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 616, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addComponent(fillBox)
+                .addContainerGap(20, Short.MAX_VALUE))
+        );
+
+        jToolBar2.add(jPanel1);
+
+        jTabbedPane2.addTab("View", jToolBar2);
+
+        canvas.setBackground(new java.awt.Color(255, 255, 255));
+        canvas.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
+
+        javax.swing.GroupLayout canvasLayout = new javax.swing.GroupLayout(canvas);
+        canvas.setLayout(canvasLayout);
+        canvasLayout.setHorizontalGroup(
+            canvasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        canvasLayout.setVerticalGroup(
+            canvasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 535, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1108, Short.MAX_VALUE)
+            .addComponent(jTabbedPane2)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(canvas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -284,8 +373,8 @@ public class GraphicRedactor extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(canvas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 81, Short.MAX_VALUE))
         );
 
         pack();
@@ -298,6 +387,36 @@ public class GraphicRedactor extends javax.swing.JFrame {
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+       Color c = JColorChooser.showDialog(null, null, Color.black);
+       colSample.setBackground(c);
+       ((Canvas)canvas).setColor(c);
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void strokeSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_strokeSpinnerStateChanged
+       ((Canvas)canvas).setStroke((int) strokeSpinner.getValue());
+    }//GEN-LAST:event_strokeSpinnerStateChanged
+
+    private void brushChooserItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_brushChooserItemStateChanged
+          if (evt.getStateChange() == evt.SELECTED) {
+          int num = Integer.parseInt(evt.getItem().toString());
+          BrushType b;
+          if(num ==0 )b = BrushType.brush; 
+          else if(num ==1 )b = BrushType.pencil; 
+          else if(num ==2 )b = BrushType.spray; 
+          else return;
+       ((Canvas)canvas).setType(b);
+       }
+    }//GEN-LAST:event_brushChooserItemStateChanged
+
+    private void circleButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_circleButActionPerformed
+        ((Canvas)canvas).setType(BrushType.circle);
+    }//GEN-LAST:event_circleButActionPerformed
+
+    private void rectButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rectButActionPerformed
+       ((Canvas)canvas).setType(BrushType.rect);
+    }//GEN-LAST:event_rectButActionPerformed
 
     /**
      * @param args the command line arguments
@@ -336,6 +455,10 @@ public class GraphicRedactor extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox brushChooser;
+    private javax.swing.JPanel canvas;
+    private javax.swing.JButton circleBut;
+    private javax.swing.JPanel colSample;
+    private javax.swing.JCheckBox fillBox;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
@@ -360,9 +483,10 @@ public class GraphicRedactor extends javax.swing.JFrame {
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator4;
-    private javax.swing.JSpinner jSpinner2;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
+    private javax.swing.JButton rectBut;
+    private javax.swing.JSpinner strokeSpinner;
     // End of variables declaration//GEN-END:variables
 }
