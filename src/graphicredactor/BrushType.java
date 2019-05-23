@@ -9,4 +9,4 @@ package graphicredactor;
  *
  * @author k256
  */
-public enum BrushType {pencil,brush,spray,circle,rect}
+public enum BrushType {line,brush,spray,circle,rect,text}

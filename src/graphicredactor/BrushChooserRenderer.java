@@ -29,7 +29,7 @@ class BrushChooserRenderer extends JLabel
         new ImageIcon(getClass().getResource("/icons/spray.png"))
         };
         this.brushStrings = new String[] {
-        "brush","pencil","spray"
+        "brush","line","spray"
         };
         setOpaque(true);
         setHorizontalAlignment(CENTER);

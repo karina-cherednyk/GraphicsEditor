@@ -7,6 +7,7 @@ package graphicredactor;
 //first commit
 
 import java.awt.Color;
+import java.awt.Font;
 import javax.swing.JColorChooser;
 
 /**
@@ -49,21 +50,24 @@ public class GraphicRedactor extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JToolBar.Separator();
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
-        colSample = new javax.swing.JPanel();
-        jSeparator4 = new javax.swing.JToolBar.Separator();
         jPanel5 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         strokeSpinner = new javax.swing.JSpinner();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox();
-        jLabel4 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox();
+        colSample = new javax.swing.JPanel();
         jToolBar2 = new javax.swing.JToolBar();
         circleBut = new javax.swing.JButton();
         rectBut = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         fillBox = new javax.swing.JCheckBox();
+        jLabel3 = new javax.swing.JLabel();
+        fontBox = new javax.swing.JComboBox();
+        jLabel1 = new javax.swing.JLabel();
+        fontSizeBox = new javax.swing.JComboBox();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        text = new javax.swing.JTextArea();
+        textButton = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        styleBox = new javax.swing.JComboBox();
         canvas = new Canvas();
 
         jMenuItem1.setText("jMenuItem1");
@@ -106,7 +110,7 @@ public class GraphicRedactor extends javax.swing.JFrame {
                 .addComponent(jButton10)
                 .addGap(18, 18, 18)
                 .addComponent(jButton9)
-                .addContainerGap(835, Short.MAX_VALUE))
+                .addContainerGap(895, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -206,22 +210,6 @@ public class GraphicRedactor extends javax.swing.JFrame {
         });
         jToolBar1.add(jButton8);
 
-        colSample.setBackground(new java.awt.Color(0, 0, 0));
-
-        javax.swing.GroupLayout colSampleLayout = new javax.swing.GroupLayout(colSample);
-        colSample.setLayout(colSampleLayout);
-        colSampleLayout.setHorizontalGroup(
-            colSampleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 11, Short.MAX_VALUE)
-        );
-        colSampleLayout.setVerticalGroup(
-            colSampleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 70, Short.MAX_VALUE)
-        );
-
-        jToolBar1.add(colSample);
-        jToolBar1.add(jSeparator4);
-
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("line width");
 
@@ -232,58 +220,46 @@ public class GraphicRedactor extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/font.png"))); // NOI18N
+        colSample.setBackground(new java.awt.Color(0, 0, 0));
+        colSample.setPreferredSize(new java.awt.Dimension(50, 50));
+        colSample.setVerifyInputWhenFocusTarget(false);
 
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Font");
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Times New Roman", "Arial", "Comic Sans MS", "Tahoma" }));
-
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("Size");
-
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4" }));
+        javax.swing.GroupLayout colSampleLayout = new javax.swing.GroupLayout(colSample);
+        colSample.setLayout(colSampleLayout);
+        colSampleLayout.setHorizontalGroup(
+            colSampleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 50, Short.MAX_VALUE)
+        );
+        colSampleLayout.setVerticalGroup(
+            colSampleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
-                    .addComponent(strokeSpinner))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel3)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(colSample, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(strokeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(350, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(colSample, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(strokeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel3)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(strokeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 8, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         jToolBar1.add(jPanel5);
@@ -319,25 +295,106 @@ public class GraphicRedactor extends javax.swing.JFrame {
         });
         jToolBar2.add(rectBut);
 
-        fillBox.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        fillBox.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         fillBox.setText("fill");
         fillBox.setToolTipText("");
+        fillBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fillBoxActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/font.png"))); // NOI18N
+
+        fontBox.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        fontBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Times New Roman", "Arial", "Comic Sans MS", "Tahoma" }));
+
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("font size");
+        jLabel1.setToolTipText("");
+
+        fontSizeBox.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        fontSizeBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "10", "12", "14", "18", "24 ", "36", "48" }));
+        fontSizeBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fontSizeBoxActionPerformed(evt);
+            }
+        });
+
+        text.setColumns(20);
+        text.setRows(5);
+        text.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                textKeyPressed(evt);
+            }
+        });
+        jScrollPane1.setViewportView(text);
+
+        textButton.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        textButton.setText("write text");
+        textButton.setToolTipText("");
+        textButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("font style");
+
+        styleBox.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        styleBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "plain", "bold", "italic" }));
+        styleBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                styleBoxActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(16, 16, 16)
                 .addComponent(fillBox)
-                .addContainerGap(909, Short.MAX_VALUE))
+                .addGap(34, 34, 34)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(styleBox, 0, 64, Short.MAX_VALUE)
+                    .addComponent(fontSizeBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(fontBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(textButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(425, 425, 425))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addComponent(fillBox)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(fillBox)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(fontBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4)
+                            .addComponent(styleBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(fontSizeBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1)
+                            .addComponent(textButton)))
+                    .addComponent(jLabel3)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jToolBar2.add(jPanel1);
@@ -403,7 +460,7 @@ public class GraphicRedactor extends javax.swing.JFrame {
           int num = Integer.parseInt(evt.getItem().toString());
           BrushType b;
           if(num ==0 )b = BrushType.brush; 
-          else if(num ==1 )b = BrushType.pencil; 
+          else if(num ==1 )b = BrushType.line; 
           else if(num ==2 )b = BrushType.spray; 
           else return;
        ((Canvas)canvas).setType(b);
@@ -412,12 +469,47 @@ public class GraphicRedactor extends javax.swing.JFrame {
 
     private void circleButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_circleButActionPerformed
         ((Canvas)canvas).setType(BrushType.circle);
+        ((Canvas)canvas).setFill(fillBox.isSelected());
     }//GEN-LAST:event_circleButActionPerformed
 
     private void rectButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rectButActionPerformed
        ((Canvas)canvas).setType(BrushType.rect);
+       ((Canvas)canvas).setFill(fillBox.isSelected());
     }//GEN-LAST:event_rectButActionPerformed
 
+    private void fontSizeBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fontSizeBoxActionPerformed
+         prepareFont();
+    }//GEN-LAST:event_fontSizeBoxActionPerformed
+
+    private void textButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textButtonActionPerformed
+     
+       ((Canvas)canvas).setType(BrushType.text);
+    }//GEN-LAST:event_textButtonActionPerformed
+
+    private void styleBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_styleBoxActionPerformed
+      prepareFont();
+    }//GEN-LAST:event_styleBoxActionPerformed
+
+    private void fillBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fillBoxActionPerformed
+        ((Canvas)canvas).setFill(fillBox.isSelected());
+    }//GEN-LAST:event_fillBoxActionPerformed
+
+    private void textKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textKeyPressed
+        String currentText = text.getText();
+        ((Canvas)canvas).setText(currentText);
+    }//GEN-LAST:event_textKeyPressed
+    private void prepareFont(){
+       int size = Integer.parseInt(fontSizeBox.getModel().getSelectedItem().toString().trim());
+       String fontStyle = styleBox.getModel().getSelectedItem().toString();
+       int style;
+       if(fontStyle == "plain") style = Font.PLAIN;
+       else if(fontStyle == "italic") style = Font.ITALIC;
+       else style = Font.BOLD;
+       String fontName = fontBox.getModel().getSelectedItem().toString();
+       Font f = new Font(fontName,style,size);
+        text.setFont(f);
+       ((Canvas)canvas).setTextFont(f);
+    }
     /**
      * @param args the command line arguments
      */
@@ -459,6 +551,8 @@ public class GraphicRedactor extends javax.swing.JFrame {
     private javax.swing.JButton circleBut;
     private javax.swing.JPanel colSample;
     private javax.swing.JCheckBox fillBox;
+    private javax.swing.JComboBox fontBox;
+    private javax.swing.JComboBox fontSizeBox;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
@@ -469,8 +563,6 @@ public class GraphicRedactor extends javax.swing.JFrame {
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
-    private javax.swing.JComboBox jComboBox2;
-    private javax.swing.JComboBox jComboBox3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -480,13 +572,16 @@ public class GraphicRedactor extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
-    private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JButton rectBut;
     private javax.swing.JSpinner strokeSpinner;
+    private javax.swing.JComboBox styleBox;
+    private javax.swing.JTextArea text;
+    private javax.swing.JButton textButton;
     // End of variables declaration//GEN-END:variables
 }
