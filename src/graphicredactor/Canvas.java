@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Shape;
 import java.awt.Stroke;
@@ -18,6 +19,8 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
 import javax.swing.JPanel;
@@ -29,9 +32,6 @@ interface Drawable{ public void draw(Graphics2D g2);}
  */
 public class Canvas extends JPanel {
 
-  
-
- 
     private class MyShape implements Drawable{
     public Shape shape;
     public Color MScolor = color;
@@ -69,7 +69,21 @@ public class Canvas extends JPanel {
             g2.drawString(MSstring, x, y);
         }
     }
+    private class MyImage implements Drawable{
+    public BufferedImage MIimage = image;
+    public int width = image.getWidth();
+    public int height = image.getHeight();
+    public int x,y;
+        public MyImage(int x, int y){
+        this.x = x;
+        this.y = y;
+         }
+        @Override
+        public void draw(Graphics2D g2) {
+           g2.drawImage(MIimage, x, y, width, height, null); 
+        }
     
+    }
     public Canvas()
     {
        setHandler(bmh);
@@ -90,6 +104,8 @@ public class Canvas extends JPanel {
     RectMouseHandler rmh = new RectMouseHandler();
     LineMouseHandler lmh = new LineMouseHandler();
     TextMouseHandler tmh = new TextMouseHandler();
+    ImageMouseHandler imh = new ImageMouseHandler();
+    ImageCreateHandler ich = new ImageCreateHandler();
     MouseHandler curHandler;
     Color color = Color.BLACK;
     //pencil, brush, spray, circle, rect
@@ -102,6 +118,9 @@ public class Canvas extends JPanel {
     boolean fill;
     String text;
     Font font =  new Font("Times New Roman",Font.PLAIN,10);
+    BufferedImage image;
+    //resize or move
+    private boolean resize = true;
     
     public void setColor(Color c){
     color = c;
@@ -118,6 +137,13 @@ public class Canvas extends JPanel {
     public void setTextFont(Font f){
     font = f;
     } 
+    public void setImage(BufferedImage myPicture) {
+        image = myPicture;
+    }
+    public void setImageTransform(boolean res){
+    resize = res;
+    }
+
     public void setType(BrushType bt){
        type = bt;
        switch(type){
@@ -127,6 +153,8 @@ public class Canvas extends JPanel {
            case circle : setHandler(cmh); break;
            case rect : setHandler(rmh); break;
            case text : setHandler(tmh); break;
+           case imageCreate : setHandler(ich); break;
+           case imageTransform : setHandler(imh); break;
            default : break;
        }
     }
@@ -272,6 +300,72 @@ public class Canvas extends JPanel {
         }
 
         @Override
+        public void mouseDragged(MouseEvent e) {
+        }
+    }
+  
+    private class ImageMouseHandler extends MouseHandler{
+    private int pOX, pOY;
+    private int iOX, iOY;
+    private MyImage currentImage;
+        @Override
+        public void mousePressed(MouseEvent e) {
+            Point p = e.getPoint();
+            Iterator<Drawable> i = shapes.descendingIterator();
+            Drawable shape;
+            while(i.hasNext()){
+            shape = i.next();
+            if(shape instanceof MyImage){
+            MyImage img = (MyImage)shape;    
+            int xBegin = img.x;
+            int xEnd = img.x+img.width;
+            int yBegin = img.y;
+            int yEnd = img.y+img.height;
+            int x = p.x; int y = p.y;
+            if(x>=xBegin&&x<=xEnd&&y>=yBegin&&y<=yEnd){
+                currentImage=img;
+                pOX = x; pOY=y;
+                iOX = img.x; iOY=img.y;
+                break;
+            }
+            } 
+            }
+            }
+        @Override
+        public void mouseDragged(MouseEvent e) {
+         Point p = e.getPoint();   
+         if(currentImage==null) return;
+         MyImage image = currentImage;
+         if(resize) {
+            int x = image.x;
+            int y = image.y;
+            if(x<=0 || y<=0)return;
+            int newWidth = p.x - x;
+            int newHeight = p.y - y;
+            if(newWidth<=0 || newHeight<=0) return;
+            image.width = newWidth;
+            image.height = newHeight;
+         }
+         else {
+            
+            image.x = iOX+(p.x-pOX);
+            image.y = iOY+(p.y-pOY);
+         }
+         repaint();
+        }
+        @Override
+        public void mouseReleased(MouseEvent e){ 
+        if(!resize) currentImage=null;
+        }
+    }
+    private class ImageCreateHandler extends MouseHandler{
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+          Point p = e.getPoint();
+            shapes.add(new MyImage(p.x,p.y));
+            repaint();
+        }
         public void mouseDragged(MouseEvent e) {
         }
     }

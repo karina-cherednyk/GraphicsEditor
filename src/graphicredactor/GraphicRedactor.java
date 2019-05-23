@@ -8,7 +8,15 @@ package graphicredactor;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.JColorChooser;
+import javax.swing.JFileChooser;
 
 /**
  *
@@ -34,10 +42,14 @@ public class GraphicRedactor extends javax.swing.JFrame {
 
         jMenuItem1 = new javax.swing.JMenuItem();
         jPanel4 = new javax.swing.JPanel();
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
-        jButton10 = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
+        saveBut = new javax.swing.JButton();
+        openBut = new javax.swing.JButton();
+        scaleBut = new javax.swing.JRadioButton();
+        moveBut = new javax.swing.JRadioButton();
+        jRadioButton1 = new javax.swing.JRadioButton();
         jToolBar1 = new javax.swing.JToolBar();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -90,16 +102,52 @@ public class GraphicRedactor extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(153, 153, 255));
 
-        jButton10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/save.png"))); // NOI18N
-        jButton10.setText("Save");
-        jButton10.addActionListener(new java.awt.event.ActionListener() {
+        saveBut.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        saveBut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/save.png"))); // NOI18N
+        saveBut.setText("Save");
+        saveBut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton10ActionPerformed(evt);
+                saveButActionPerformed(evt);
             }
         });
 
-        jButton9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/open.png"))); // NOI18N
-        jButton9.setText("Open");
+        openBut.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        openBut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/open.png"))); // NOI18N
+        openBut.setText("Open");
+        openBut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openButActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(scaleBut);
+        scaleBut.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        scaleBut.setText("scale");
+        scaleBut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                scaleButActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(moveBut);
+        moveBut.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        moveBut.setText("move");
+        moveBut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                moveButActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(jRadioButton1);
+        jRadioButton1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jRadioButton1.setSelected(true);
+        jRadioButton1.setText("create");
+        jRadioButton1.setToolTipText("");
+        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -107,18 +155,31 @@ public class GraphicRedactor extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addComponent(jButton10)
+                .addComponent(saveBut)
                 .addGap(18, 18, 18)
-                .addComponent(jButton9)
-                .addContainerGap(895, Short.MAX_VALUE))
+                .addComponent(openBut)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(moveBut, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(scaleBut, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jRadioButton1)
+                .addContainerGap(753, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton10)
-                    .addComponent(jButton9))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(saveBut)
+                        .addComponent(openBut))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(scaleBut)
+                            .addComponent(jRadioButton1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(moveBut)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -441,9 +502,23 @@ public class GraphicRedactor extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton6ActionPerformed
 
-    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton10ActionPerformed
+    private void saveButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButActionPerformed
+    JFileChooser fc = new JFileChooser();
+    int val = fc.showSaveDialog(null);
+    if(val == JFileChooser.APPROVE_OPTION){
+    File file = fc.getSelectedFile();
+                                           try {
+                                               if(!file.getAbsolutePath().endsWith(".png") ) {
+                                               file = new File(file.getAbsolutePath()+".png");
+                                                       }
+                                               BufferedImage image = new BufferedImage(canvas.getWidth(), canvas.getHeight(), BufferedImage.TYPE_INT_RGB);
+                                               Graphics2D graphics2D = image.createGraphics();
+                                               canvas.paint(graphics2D);
+                                               
+                                               ImageIO.write(image,"png",file);
+                                           } catch (IOException e1) {   }
+    }
+    }//GEN-LAST:event_saveButActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
        Color c = JColorChooser.showDialog(null, null, Color.black);
@@ -498,6 +573,34 @@ public class GraphicRedactor extends javax.swing.JFrame {
         String currentText = text.getText();
         ((Canvas)canvas).setText(currentText);
     }//GEN-LAST:event_textKeyPressed
+
+    private void openButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openButActionPerformed
+    JFileChooser fc = new JFileChooser();
+    int val = fc.showOpenDialog(null);
+    if(val==JFileChooser.APPROVE_OPTION){
+    File file = fc.getSelectedFile();
+        try {
+            BufferedImage myPicture = ImageIO.read(file);
+            ((Canvas)canvas).setImage(myPicture);
+            ((Canvas)canvas).setType(BrushType.imageCreate);
+        } catch (IOException ex) { }
+       
+    }
+    }//GEN-LAST:event_openButActionPerformed
+
+    private void scaleButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scaleButActionPerformed
+       ((Canvas)canvas).setImageTransform(true);
+       ((Canvas)canvas).setType(BrushType.imageTransform);
+    }//GEN-LAST:event_scaleButActionPerformed
+
+    private void moveButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveButActionPerformed
+        ((Canvas)canvas).setImageTransform(false);
+        ((Canvas)canvas).setType(BrushType.imageTransform);
+    }//GEN-LAST:event_moveButActionPerformed
+
+    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+         ((Canvas)canvas).setType(BrushType.imageCreate);
+    }//GEN-LAST:event_jRadioButton1ActionPerformed
     private void prepareFont(){
        int size = Integer.parseInt(fontSizeBox.getModel().getSelectedItem().toString().trim());
        String fontStyle = styleBox.getModel().getSelectedItem().toString();
@@ -547,6 +650,7 @@ public class GraphicRedactor extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox brushChooser;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JPanel canvas;
     private javax.swing.JButton circleBut;
     private javax.swing.JPanel colSample;
@@ -554,7 +658,6 @@ public class GraphicRedactor extends javax.swing.JFrame {
     private javax.swing.JComboBox fontBox;
     private javax.swing.JComboBox fontSizeBox;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -562,7 +665,6 @@ public class GraphicRedactor extends javax.swing.JFrame {
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -572,13 +674,18 @@ public class GraphicRedactor extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
+    private javax.swing.JRadioButton moveBut;
+    private javax.swing.JButton openBut;
     private javax.swing.JButton rectBut;
+    private javax.swing.JButton saveBut;
+    private javax.swing.JRadioButton scaleBut;
     private javax.swing.JSpinner strokeSpinner;
     private javax.swing.JComboBox styleBox;
     private javax.swing.JTextArea text;
