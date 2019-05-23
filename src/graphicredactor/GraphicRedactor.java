@@ -45,23 +45,23 @@ public class GraphicRedactor extends javax.swing.JFrame {
         buttonGroup1 = new javax.swing.ButtonGroup();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
-        saveBut = new javax.swing.JButton();
+        jButton10 = new javax.swing.JButton();
         openBut = new javax.swing.JButton();
         scaleBut = new javax.swing.JRadioButton();
         moveBut = new javax.swing.JRadioButton();
         jRadioButton1 = new javax.swing.JRadioButton();
         jToolBar1 = new javax.swing.JToolBar();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        copyBut = new javax.swing.JButton();
+        pasteBut = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        cutBut = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         brushChooser = new javax.swing.JComboBox();
         jButton6 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JToolBar.Separator();
         jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
+        palette = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         strokeSpinner = new javax.swing.JSpinner();
@@ -80,6 +80,8 @@ public class GraphicRedactor extends javax.swing.JFrame {
         textButton = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         styleBox = new javax.swing.JComboBox();
+        paletteCopy = new javax.swing.JButton();
+        colSampleCopy = new javax.swing.JPanel();
         canvas = new Canvas();
 
         jMenuItem1.setText("jMenuItem1");
@@ -102,12 +104,12 @@ public class GraphicRedactor extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(153, 153, 255));
 
-        saveBut.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        saveBut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/save.png"))); // NOI18N
-        saveBut.setText("Save");
-        saveBut.addActionListener(new java.awt.event.ActionListener() {
+        jButton10.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jButton10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/save.png"))); // NOI18N
+        jButton10.setText("Save");
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveButActionPerformed(evt);
+                jButton10ActionPerformed(evt);
             }
         });
 
@@ -138,16 +140,9 @@ public class GraphicRedactor extends javax.swing.JFrame {
             }
         });
 
-        buttonGroup1.add(jRadioButton1);
         jRadioButton1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        jRadioButton1.setSelected(true);
         jRadioButton1.setText("create");
         jRadioButton1.setToolTipText("");
-        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton1ActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -155,7 +150,7 @@ public class GraphicRedactor extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addComponent(saveBut)
+                .addComponent(jButton10)
                 .addGap(18, 18, 18)
                 .addComponent(openBut)
                 .addGap(18, 18, 18)
@@ -164,7 +159,7 @@ public class GraphicRedactor extends javax.swing.JFrame {
                     .addComponent(scaleBut, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jRadioButton1)
-                .addContainerGap(753, Short.MAX_VALUE))
+                .addContainerGap(894, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -172,7 +167,7 @@ public class GraphicRedactor extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(saveBut)
+                        .addComponent(jButton10)
                         .addComponent(openBut))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -188,19 +183,29 @@ public class GraphicRedactor extends javax.swing.JFrame {
         jToolBar1.setBackground(new java.awt.Color(153, 153, 153));
         jToolBar1.setRollover(true);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/copy.png"))); // NOI18N
-        jButton1.setText("copy");
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton1);
+        copyBut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/copy.png"))); // NOI18N
+        copyBut.setText("copy");
+        copyBut.setFocusable(false);
+        copyBut.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        copyBut.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        copyBut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                copyButActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(copyBut);
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/paste.png"))); // NOI18N
-        jButton2.setText("paste");
-        jButton2.setFocusable(false);
-        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton2);
+        pasteBut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/paste.png"))); // NOI18N
+        pasteBut.setText("paste");
+        pasteBut.setFocusable(false);
+        pasteBut.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        pasteBut.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        pasteBut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pasteButActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(pasteBut);
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/select.png"))); // NOI18N
         jButton3.setText("select");
@@ -209,12 +214,17 @@ public class GraphicRedactor extends javax.swing.JFrame {
         jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(jButton3);
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/scissors.png"))); // NOI18N
-        jButton4.setText("cut");
-        jButton4.setFocusable(false);
-        jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton4);
+        cutBut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/scissors.png"))); // NOI18N
+        cutBut.setText("cut");
+        cutBut.setFocusable(false);
+        cutBut.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        cutBut.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        cutBut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cutButActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(cutBut);
         jToolBar1.add(jSeparator1);
 
         brushChooser.setBackground(new java.awt.Color(153, 153, 255));
@@ -259,17 +269,17 @@ public class GraphicRedactor extends javax.swing.JFrame {
         jButton7.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(jButton7);
 
-        jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/palette.png"))); // NOI18N
-        jButton8.setText("palette");
-        jButton8.setFocusable(false);
-        jButton8.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton8.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
+        palette.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/palette.png"))); // NOI18N
+        palette.setText("palette");
+        palette.setFocusable(false);
+        palette.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        palette.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        palette.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
+                paletteActionPerformed(evt);
             }
         });
-        jToolBar1.add(jButton8);
+        jToolBar1.add(palette);
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("line width");
@@ -307,7 +317,7 @@ public class GraphicRedactor extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(strokeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(350, Short.MAX_VALUE))
+                .addContainerGap(491, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -385,6 +395,8 @@ public class GraphicRedactor extends javax.swing.JFrame {
 
         text.setColumns(20);
         text.setRows(5);
+        text.setPreferredSize(new java.awt.Dimension(70, 64));
+        text.setRequestFocusEnabled(false);
         text.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 textKeyPressed(evt);
@@ -413,13 +425,40 @@ public class GraphicRedactor extends javax.swing.JFrame {
             }
         });
 
+        paletteCopy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/palette.png"))); // NOI18N
+        paletteCopy.setText("palette");
+        paletteCopy.setFocusable(false);
+        paletteCopy.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        paletteCopy.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        paletteCopy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                paletteCopyActionPerformed(evt);
+            }
+        });
+
+        colSampleCopy.setBackground(new java.awt.Color(0, 0, 0));
+        colSampleCopy.setPreferredSize(new java.awt.Dimension(50, 50));
+        colSampleCopy.setVerifyInputWhenFocusTarget(false);
+
+        javax.swing.GroupLayout colSampleCopyLayout = new javax.swing.GroupLayout(colSampleCopy);
+        colSampleCopy.setLayout(colSampleCopyLayout);
+        colSampleCopyLayout.setHorizontalGroup(
+            colSampleCopyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 50, Short.MAX_VALUE)
+        );
+        colSampleCopyLayout.setVerticalGroup(
+            colSampleCopyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 48, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(fillBox)
-                .addGap(34, 34, 34)
+                .addGap(169, 169, 169)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -434,28 +473,39 @@ public class GraphicRedactor extends javax.swing.JFrame {
                     .addComponent(fontBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(textButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(425, 425, 425))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(paletteCopy, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(colSampleCopy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(43, 43, 43))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fillBox)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(fontBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4)
-                            .addComponent(styleBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(fontSizeBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1)
-                            .addComponent(textButton)))
-                    .addComponent(jLabel3)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(fillBox)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(fontBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel4)
+                                    .addComponent(styleBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(fontSizeBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel1)
+                                    .addComponent(textButton)))
+                            .addComponent(jLabel3)
+                            .addComponent(colSampleCopy, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(paletteCopy, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jToolBar2.add(jPanel1);
@@ -484,7 +534,7 @@ public class GraphicRedactor extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(canvas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(21, 21, 21))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -502,7 +552,7 @@ public class GraphicRedactor extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton6ActionPerformed
 
-    private void saveButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButActionPerformed
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
     JFileChooser fc = new JFileChooser();
     int val = fc.showSaveDialog(null);
     if(val == JFileChooser.APPROVE_OPTION){
@@ -518,13 +568,14 @@ public class GraphicRedactor extends javax.swing.JFrame {
                                                ImageIO.write(image,"png",file);
                                            } catch (IOException e1) {   }
     }
-    }//GEN-LAST:event_saveButActionPerformed
+    }//GEN-LAST:event_jButton10ActionPerformed
 
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+    private void paletteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paletteActionPerformed
        Color c = JColorChooser.showDialog(null, null, Color.black);
        colSample.setBackground(c);
+       colSampleCopy.setBackground(c);
        ((Canvas)canvas).setColor(c);
-    }//GEN-LAST:event_jButton8ActionPerformed
+    }//GEN-LAST:event_paletteActionPerformed
 
     private void strokeSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_strokeSpinnerStateChanged
        ((Canvas)canvas).setStroke((int) strokeSpinner.getValue());
@@ -533,22 +584,22 @@ public class GraphicRedactor extends javax.swing.JFrame {
     private void brushChooserItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_brushChooserItemStateChanged
           if (evt.getStateChange() == evt.SELECTED) {
           int num = Integer.parseInt(evt.getItem().toString());
-          BrushType b;
-          if(num ==0 )b = BrushType.brush; 
-          else if(num ==1 )b = BrushType.line; 
-          else if(num ==2 )b = BrushType.spray; 
+          ToolType b;
+          if(num ==0 )b = ToolType.brush; 
+          else if(num ==1 )b = ToolType.line; 
+          else if(num ==2 )b = ToolType.spray; 
           else return;
        ((Canvas)canvas).setType(b);
        }
     }//GEN-LAST:event_brushChooserItemStateChanged
 
     private void circleButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_circleButActionPerformed
-        ((Canvas)canvas).setType(BrushType.circle);
+        ((Canvas)canvas).setType(ToolType.circle);
         ((Canvas)canvas).setFill(fillBox.isSelected());
     }//GEN-LAST:event_circleButActionPerformed
 
     private void rectButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rectButActionPerformed
-       ((Canvas)canvas).setType(BrushType.rect);
+       ((Canvas)canvas).setType(ToolType.rect);
        ((Canvas)canvas).setFill(fillBox.isSelected());
     }//GEN-LAST:event_rectButActionPerformed
 
@@ -558,7 +609,7 @@ public class GraphicRedactor extends javax.swing.JFrame {
 
     private void textButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textButtonActionPerformed
      
-       ((Canvas)canvas).setType(BrushType.text);
+       ((Canvas)canvas).setType(ToolType.text);
     }//GEN-LAST:event_textButtonActionPerformed
 
     private void styleBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_styleBoxActionPerformed
@@ -582,7 +633,7 @@ public class GraphicRedactor extends javax.swing.JFrame {
         try {
             BufferedImage myPicture = ImageIO.read(file);
             ((Canvas)canvas).setImage(myPicture);
-            ((Canvas)canvas).setType(BrushType.imageCreate);
+            ((Canvas)canvas).setType(ToolType.imageCreate);
         } catch (IOException ex) { }
        
     }
@@ -590,17 +641,34 @@ public class GraphicRedactor extends javax.swing.JFrame {
 
     private void scaleButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scaleButActionPerformed
        ((Canvas)canvas).setImageTransform(true);
-       ((Canvas)canvas).setType(BrushType.imageTransform);
+       ((Canvas)canvas).setType(ToolType.imageTransform);
     }//GEN-LAST:event_scaleButActionPerformed
 
     private void moveButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveButActionPerformed
         ((Canvas)canvas).setImageTransform(false);
-        ((Canvas)canvas).setType(BrushType.imageTransform);
+        ((Canvas)canvas).setType(ToolType.imageTransform);
     }//GEN-LAST:event_moveButActionPerformed
 
-    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
-         ((Canvas)canvas).setType(BrushType.imageCreate);
-    }//GEN-LAST:event_jRadioButton1ActionPerformed
+    private void paletteCopyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paletteCopyActionPerformed
+       Color c = JColorChooser.showDialog(null, null, Color.black);
+       colSample.setBackground(c);
+       colSampleCopy.setBackground(c);
+       ((Canvas)canvas).setColor(c);
+    }//GEN-LAST:event_paletteCopyActionPerformed
+
+    private void cutButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cutButActionPerformed
+        ((Canvas)canvas).setCut(true);
+        ((Canvas)canvas).setType(ToolType.cutCopy);
+    }//GEN-LAST:event_cutButActionPerformed
+
+    private void copyButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyButActionPerformed
+        ((Canvas)canvas).setCut(false);
+        ((Canvas)canvas).setType(ToolType.cutCopy);
+    }//GEN-LAST:event_copyButActionPerformed
+
+    private void pasteButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pasteButActionPerformed
+         ((Canvas)canvas).setType(ToolType.paste);
+    }//GEN-LAST:event_pasteButActionPerformed
     private void prepareFont(){
        int size = Integer.parseInt(fontSizeBox.getModel().getSelectedItem().toString().trim());
        String fontStyle = styleBox.getModel().getSelectedItem().toString();
@@ -654,17 +722,17 @@ public class GraphicRedactor extends javax.swing.JFrame {
     private javax.swing.JPanel canvas;
     private javax.swing.JButton circleBut;
     private javax.swing.JPanel colSample;
+    private javax.swing.JPanel colSampleCopy;
+    private javax.swing.JButton copyBut;
+    private javax.swing.JButton cutBut;
     private javax.swing.JCheckBox fillBox;
     private javax.swing.JComboBox fontBox;
     private javax.swing.JComboBox fontSizeBox;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -683,8 +751,10 @@ public class GraphicRedactor extends javax.swing.JFrame {
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JRadioButton moveBut;
     private javax.swing.JButton openBut;
+    private javax.swing.JButton palette;
+    private javax.swing.JButton paletteCopy;
+    private javax.swing.JButton pasteBut;
     private javax.swing.JButton rectBut;
-    private javax.swing.JButton saveBut;
     private javax.swing.JRadioButton scaleBut;
     private javax.swing.JSpinner strokeSpinner;
     private javax.swing.JComboBox styleBox;

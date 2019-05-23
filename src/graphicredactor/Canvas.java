@@ -7,6 +7,7 @@ package graphicredactor;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -44,6 +45,11 @@ public class Canvas extends JPanel {
         shape = sh;
         fill = f;
     }
+    public MyShape(Shape sh, boolean f,Color c){
+        shape = sh;
+        fill = f;
+        MScolor = c;
+    }
      @Override
     public void draw(Graphics2D g2) {
        g2.setStroke(MSstroke);
@@ -52,6 +58,24 @@ public class Canvas extends JPanel {
        g2.draw(shape);
     }
     }
+    private class MySelect implements Drawable{
+    public Rectangle2D area;
+    private Stroke MSstroke = new BasicStroke(1, BasicStroke.CAP_BUTT,
+            BasicStroke.JOIN_BEVEL, 1, new float[]{5, 5}, 0);
+    private Color MScolor = Color.BLUE; 
+    private double x,y;
+    public MySelect(Rectangle2D rect){
+    area = rect;
+    }
+        @Override
+        public void draw(Graphics2D g2) {
+             g2.setStroke(MSstroke);
+             g2.setColor(MScolor);
+             g2.draw(area);
+        }
+    
+    }
+
     private class MyString implements Drawable{
     public String MSstring = text;
     public Color MScolor = color;
@@ -106,10 +130,12 @@ public class Canvas extends JPanel {
     TextMouseHandler tmh = new TextMouseHandler();
     ImageMouseHandler imh = new ImageMouseHandler();
     ImageCreateHandler ich = new ImageCreateHandler();
+    CutCopyMouseHandler ccmh = new CutCopyMouseHandler();
+    PasteMouseHandler pmh = new PasteMouseHandler();
     MouseHandler curHandler;
     Color color = Color.BLACK;
     //pencil, brush, spray, circle, rect
-    BrushType type = BrushType.brush;
+    ToolType type = ToolType.brush;
     int stroke = 1;
     int range = 5;
     Random r = new Random();
@@ -143,8 +169,10 @@ public class Canvas extends JPanel {
     public void setImageTransform(boolean res){
     resize = res;
     }
-
-    public void setType(BrushType bt){
+    public void setCut(boolean c){
+    cut = c;
+    }
+    public void setType(ToolType bt){
        type = bt;
        switch(type){
            case line : setHandler(lmh); break;
@@ -155,6 +183,8 @@ public class Canvas extends JPanel {
            case text : setHandler(tmh); break;
            case imageCreate : setHandler(ich); break;
            case imageTransform : setHandler(imh); break;
+           case cutCopy : setHandler(ccmh); break;
+           case paste : setHandler(pmh); break;
            default : break;
        }
     }
@@ -367,6 +397,64 @@ public class Canvas extends JPanel {
             repaint();
         }
         public void mouseDragged(MouseEvent e) {
+        }
+    }
+    private Rectangle2D selectedArea;
+    private boolean cut;
+    private BufferedImage beforeCut;
+    private class CutCopyMouseHandler extends MouseHandler{
+        private double beginX, beginY;
+        @Override
+        public void mousePressed(MouseEvent e) {
+           Point p = e.getPoint();
+           beginX = p.getX();
+           beginY = p.getY();
+           shapes.add(new MySelect(new Rectangle2D.Double(beginX, beginY, 1, 1)));
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+           Point p = e.getPoint();
+           MySelect ms = (MySelect)shapes.getLast(); 
+           Rectangle2D.Double rect;
+           double width = p.getX()-beginX;
+           double height = p.getY()-beginY;
+           if(width<=0 && height<=0) {
+               rect = new Rectangle2D.Double(beginX+width, beginY+height, -width, -height);
+           }
+           else if(width<=0 ) rect = new Rectangle2D.Double(beginX+width, beginY, -width, height);
+           else if(height<=0) rect = new Rectangle2D.Double(beginX, beginY+height, width, -height);
+           else rect = new Rectangle2D.Double(beginX, beginY, width, height);
+           ms.area = rect;
+           repaint(); 
+        }
+        @Override
+        public void mouseReleased(MouseEvent e){ 
+        MySelect ms = (MySelect)shapes.removeLast();
+        selectedArea = ms.area;
+        beforeCut = new BufferedImage(getWidth(),getHeight(), BufferedImage.TYPE_INT_RGB);
+          Graphics2D graphics2D = beforeCut.createGraphics();
+          paint(graphics2D);
+          graphics2D.dispose();
+        if(cut) shapes.add(new MyShape(selectedArea,true,Canvas.this.getBackground()));  
+        repaint();
+        }
+    }
+    private class PasteMouseHandler extends MouseHandler{
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+          if(selectedArea == null) return; 
+          Point p = e.getPoint();
+          image = beforeCut.getSubimage((int)selectedArea.getX(), (int)selectedArea.getY(), (int)selectedArea.getWidth(), (int)selectedArea.getHeight());
+          shapes.add(new MyImage(p.x,p.y));
+          repaint();
+        }
+        @Override
+        public void mouseDragged(MouseEvent e) {
+        }
+        public void mouseReleased(MouseEvent e){ 
+            selectedArea = null;
         }
     }
 }
