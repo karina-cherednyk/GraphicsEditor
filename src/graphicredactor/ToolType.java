@@ -9,4 +9,4 @@ package graphicredactor;
  *
  * @author k256
  */
-public enum ToolType {line,brush,spray,circle,rect,text,imageCreate,imageTransform,cutCopy,paste}
+public enum ToolType {line,brush,spray,circle,rect,text,imageCreate,imageTransform,cutCopy,paste,fill,transform,pickColor,erase}

@@ -16,6 +16,7 @@ import java.awt.Point;
 import java.awt.Shape;
 import java.awt.Stroke;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
@@ -32,7 +33,48 @@ interface Drawable{ public void draw(Graphics2D g2);}
  * @author k256
  */
 public class Canvas extends JPanel {
-
+    private LinkedList<Drawable>[] saves = new LinkedList[10];
+    int current;
+    
+    public void checkPrevious(){
+    if(current-1<0) return;
+    shapes = saves[current--];
+    repaint();
+    }
+    public void checkNext(){
+    if(current+1>=saves.length || saves[current+1]==null) return;
+    shapes = saves[current++];
+    repaint();
+    }
+       public Canvas()
+    {
+       setHandler(bmh);
+       addMouseListener(new MouseListener(){
+           @Override
+           public void mouseReleased(MouseEvent e) {   
+               LinkedList<Drawable> curShapes = new LinkedList<>();
+               for(Drawable d: shapes) curShapes.add(d);
+               if(current+1==saves.length){
+               for(int i=1; i<saves.length; i++) saves[i-1] = saves[i];
+               saves[saves.length-1] = curShapes;
+               }
+               else if(saves[current+1]==null)saves[current++] = curShapes;
+               else {
+               saves[current++] = curShapes;
+               for(int i=current+1;i<saves.length; i++) saves[i] = null;
+               }
+           }
+           @Override
+           public void mouseEntered(MouseEvent e) {}
+           @Override
+           public void mouseExited(MouseEvent e) {}
+           @Override
+           public void mousePressed(MouseEvent e) {}
+           @Override
+           public void mouseClicked(MouseEvent e) {}
+       });
+    }
+    
     private class MyShape implements Drawable{
     public Shape shape;
     public Color MScolor = color;
@@ -108,10 +150,7 @@ public class Canvas extends JPanel {
         }
     
     }
-    public Canvas()
-    {
-       setHandler(bmh);
-    }
+ 
  
     @Override
     public void paintComponent(Graphics g){
@@ -132,19 +171,27 @@ public class Canvas extends JPanel {
     ImageCreateHandler ich = new ImageCreateHandler();
     CutCopyMouseHandler ccmh = new CutCopyMouseHandler();
     PasteMouseHandler pmh = new PasteMouseHandler();
+    FillMouseHandler fmh = new FillMouseHandler();
+    TransformMouseHandler trmh = new TransformMouseHandler();
+    PickColorHandler pch = new PickColorHandler();
+    EraseMouseHandler emh = new EraseMouseHandler();
     MouseHandler curHandler;
     Color color = Color.BLACK;
-    //pencil, brush, spray, circle, rect
     ToolType type = ToolType.brush;
-    int stroke = 1;
+    int stroke = 2;
     int range = 5;
     Random r = new Random();
     double beginX;
     double beginY;
     boolean fill;
-    String text;
+    String text="";
     Font font =  new Font("Times New Roman",Font.PLAIN,10);
     BufferedImage image;
+    JPanel col1;
+    JPanel col2;
+    public void setPanels(JPanel c1,JPanel c2){
+    col1=c1; col2=c2;
+    }
     //resize or move
     private boolean resize = true;
     
@@ -172,6 +219,16 @@ public class Canvas extends JPanel {
     public void setCut(boolean c){
     cut = c;
     }
+    public void clear(){
+    shapes.clear();
+    repaint();
+    }
+    public void fill(){
+    shapes.clear();
+    setBackground(color);
+    repaint();
+    }
+    
     public void setType(ToolType bt){
        type = bt;
        switch(type){
@@ -185,6 +242,10 @@ public class Canvas extends JPanel {
            case imageTransform : setHandler(imh); break;
            case cutCopy : setHandler(ccmh); break;
            case paste : setHandler(pmh); break;
+           case fill: setHandler(fmh); break;
+           case transform : setHandler(trmh); break;    
+           case pickColor : setHandler(pch); break;    
+           case erase: setHandler(emh); break;    
            default : break;
        }
     }
@@ -385,7 +446,7 @@ public class Canvas extends JPanel {
         }
         @Override
         public void mouseReleased(MouseEvent e){ 
-        if(!resize) currentImage=null;
+        currentImage=null;
         }
     }
     private class ImageCreateHandler extends MouseHandler{
@@ -456,5 +517,146 @@ public class Canvas extends JPanel {
         public void mouseReleased(MouseEvent e){ 
             selectedArea = null;
         }
+    }
+    private class FillMouseHandler extends MouseHandler {
+        BufferedImage newLook;
+        int oldColor;
+        int newColor;
+        @Override
+        public void mousePressed(MouseEvent e) {
+           Point p = e.getPoint();
+          newLook = new BufferedImage(getWidth(),getHeight(), BufferedImage.TYPE_INT_RGB);
+          Graphics2D graphics2D = newLook.createGraphics();
+          paint(graphics2D);
+          graphics2D.dispose();
+          
+          oldColor = newLook.getRGB(p.x, p.y);
+          newColor = color.getRGB();
+          flood(p.x,p.y);
+          shapes.clear();
+          image = newLook;
+          shapes.add(new MyImage(0,0));
+          repaint();
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+        }
+        private void flood(int x, int y){
+           if(x<0 || x>=Canvas.this.getWidth() || y<0 || y>=Canvas.this.getHeight()) return;
+           if(newLook.getRGB(x, y) != oldColor) return;
+            newLook.setRGB(x, y, newColor);
+            flood(x,y-1); flood(x,y+1);flood(x-1,y); flood(x+1,y); 
+        }
+    }
+    private class TransformMouseHandler extends MouseHandler {
+    private int pOX, pOY;
+    private BufferedImage myImage;
+    private MyImage trImg;
+    private int beginX, beginY;
+    private boolean first = true;
+    private MySelect ms;
+        @Override
+        public void mousePressed(MouseEvent e) {
+           Point p = e.getPoint();  
+           if(first) {
+               beginX = p.x;
+               beginY = p.y;
+               ms = new MySelect(new Rectangle2D.Double(beginX, beginY, 1, 1));
+               shapes.add(ms);
+               return;
+           }
+           pOX = p.x;
+           pOY = p.y;
+            }
+        @Override
+        public void mouseDragged(MouseEvent e) {
+               Point p = e.getPoint(); 
+            if(first){
+           Rectangle2D.Double rect;
+           double width = p.getX()-beginX;
+           double height = p.getY()-beginY;
+           if(width<=0 && height<=0) rect = new Rectangle2D.Double(beginX+width, beginY+height, -width, -height);
+           else if(width<=0 ) rect = new Rectangle2D.Double(beginX+width, beginY, -width, height);
+           else if(height<=0) rect = new Rectangle2D.Double(beginX, beginY+height, width, -height);
+           else rect = new Rectangle2D.Double(beginX, beginY, width, height);
+           ms.area = rect;
+           repaint();  
+           return;
+            }
+
+         if(resize) {
+            int x = trImg.x;
+            int y = trImg.y;
+            if(x<=0 || y<=0)return;
+            int newWidth = p.x - x;
+            int newHeight = p.y - y;
+            if(newWidth<=0 || newHeight<=0) return;
+            trImg.width = newWidth;
+            trImg.height = newHeight;
+         }
+         else {   
+            trImg.x = beginX+(p.x-pOX);
+            trImg.y = beginY+(p.y-pOY);
+         }
+         repaint();
+        }
+        @Override
+        public void mouseReleased(MouseEvent e){ 
+        if(first){
+            shapes.remove(ms);
+            Rectangle2D rect = ms.area;
+            myImage  = new BufferedImage(getWidth(),getHeight(), BufferedImage.TYPE_INT_RGB);
+          Graphics2D graphics2D = myImage.createGraphics();
+          paint(graphics2D);
+          graphics2D.dispose();
+          myImage = myImage.getSubimage((int)rect.getX(), (int)rect.getY(), (int)rect.getWidth(), (int)rect.getHeight());
+          first = false;
+          image = myImage;
+          trImg = new MyImage(beginX,beginY);
+          shapes.add(trImg);
+          repaint();
+          return;
+        }    
+        first = true;
+        repaint();
+        }
+    }
+    private class PickColorHandler extends MouseHandler{
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+          Point p = e.getPoint();  
+          BufferedImage image  = new BufferedImage(getWidth(),getHeight(), BufferedImage.TYPE_INT_RGB);
+          Graphics2D graphics2D = image.createGraphics();
+          paint(graphics2D);
+          graphics2D.dispose();
+          
+          color = Color.decode(""+image.getRGB(p.x, p.y));
+          col1.setBackground(color);
+          col2.setBackground(color);
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+        }
+    }
+    private class EraseMouseHandler extends MouseHandler{
+     MyShape eraser;
+     @Override
+        public void mouseDragged(MouseEvent e) {
+            Point p = e.getPoint();
+            Path2D.Double current = (Path2D.Double)eraser.shape;
+            current.lineTo(p.getX(), p.getY());
+            repaint();
+        }
+        @Override
+        public void mousePressed(MouseEvent e) {
+         Path2D.Double current = new Path2D.Double();  
+         eraser = new MyShape(current, fill,Canvas.this.getBackground());
+         shapes.add(eraser);
+         Point p = e.getPoint();
+         current.moveTo(p.getX(), p.getY());
+        } 
     }
 }
