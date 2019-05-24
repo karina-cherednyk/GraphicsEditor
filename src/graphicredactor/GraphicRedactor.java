@@ -396,7 +396,7 @@ public class GraphicRedactor extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(fillCvs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(clearCvs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(52, Short.MAX_VALUE))
+                .addContainerGap(84, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -418,7 +418,7 @@ public class GraphicRedactor extends javax.swing.JFrame {
 
         jToolBar1.add(jPanel5);
 
-        jTabbedPane2.addTab("General", jToolBar1);
+        jTabbedPane2.addTab("Brush & transform", jToolBar1);
 
         jToolBar2.setBackground(new java.awt.Color(153, 153, 153));
         jToolBar2.setRollover(true);
@@ -598,7 +598,7 @@ public class GraphicRedactor extends javax.swing.JFrame {
 
         jToolBar2.add(jPanel1);
 
-        jTabbedPane2.addTab("View", jToolBar2);
+        jTabbedPane2.addTab("Text & shapes", jToolBar2);
 
         canvas.setBackground(new java.awt.Color(255, 255, 255));
         canvas.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));

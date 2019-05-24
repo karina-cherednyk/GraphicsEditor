@@ -69,6 +69,11 @@ public class Canvas extends JPanel {
        addMouseListener(new MousePressedHandler(){
            @Override
            public void mousePressed(MouseEvent e) {
+                System.out.println(first);
+               if(type == ToolType.transform && !first){
+                   System.out.println("do this");
+                   return;
+               }
                backW.setEnabled(true);
                forW.setEnabled(false);
                if(current==saves.length-1){
@@ -577,12 +582,12 @@ public class Canvas extends JPanel {
          return true;
         }
     }
+    boolean first = true;
     private class TransformMouseHandler extends MouseHandler {
     private int pOX, pOY;
     private BufferedImage myImage;
     private MyImage trImg;
     private int beginX, beginY;
-    private boolean first = true;
     private MySelect ms;
         @Override
         public void mousePressed(MouseEvent e) {
@@ -616,6 +621,7 @@ public class Canvas extends JPanel {
          if(resize) {
             int x = trImg.x;
             int y = trImg.y;
+            if(x<=0 || y<=0)return;
             int newWidth = p.x - x;
             int newHeight = p.y - y;
             if(newWidth<=0 || newHeight<=0) return;
