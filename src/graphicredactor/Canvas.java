@@ -7,11 +7,9 @@ package graphicredactor;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.Shape;
 import java.awt.Stroke;
@@ -24,58 +22,79 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JButton;
 import javax.swing.JPanel;
-
-interface Drawable{ public void draw(Graphics2D g2);}
 /**
  *
- * @author k256
+ * @author Cherednyk Karina
  */
+interface Drawable { 
+    public void draw(Graphics2D g2);
+};
+abstract class DrawClone implements Drawable,Cloneable{
+
+    @Override
+    public void draw(Graphics2D g2) { }
+    @Override
+    public DrawClone clone() throws CloneNotSupportedException{return (DrawClone)super.clone();
+}
+}
+
 public class Canvas extends JPanel {
-    private LinkedList<Drawable>[] saves = new LinkedList[10];
-    int current;
+    private LinkedList<DrawClone>[] saves = new LinkedList[10];
+    int current=0;
     
     public void checkPrevious(){
-    if(current-1<0) return;
-    shapes = saves[current--];
-    repaint();
+        current--;
+        shapes = saves[current];
+        repaint();
+        if(current-1<0) backW.setEnabled(false);
+        forW.setEnabled(true);
     }
     public void checkNext(){
-    if(current+1>=saves.length || saves[current+1]==null) return;
-    shapes = saves[current++];
-    repaint();
+        current++;
+        shapes = saves[current];
+        repaint();
+        if(current+1==saves.length|| saves[current+1]==null) forW.setEnabled(false);  
+        backW.setEnabled(true);
     }
        public Canvas()
-    {
-       setHandler(bmh);
-       addMouseListener(new MouseListener(){
+    {   
+       saves[0] = new LinkedList<>();
+       saves[1] = shapes;
+       addMouseListener(new MousePressedHandler(){
            @Override
-           public void mouseReleased(MouseEvent e) {   
-               LinkedList<Drawable> curShapes = new LinkedList<>();
-               for(Drawable d: shapes) curShapes.add(d);
-               if(current+1==saves.length){
-               for(int i=1; i<saves.length; i++) saves[i-1] = saves[i];
-               saves[saves.length-1] = curShapes;
+           public void mousePressed(MouseEvent e) {
+               backW.setEnabled(true);
+               forW.setEnabled(false);
+               if(current==saves.length-1){
+               for(int i=1;i<saves.length;i++) saves[i-1]=saves[i];
                }
-               else if(saves[current+1]==null)saves[current++] = curShapes;
-               else {
-               saves[current++] = curShapes;
-               for(int i=current+1;i<saves.length; i++) saves[i] = null;
+               else current++;
+               
+               if(saves[current] !=null){
+               for(int i=current+1; i<saves.length; i++) saves[i]=null;
                }
+               saves[current] = new LinkedList<>();
+               shapes = saves[current];
+               for(DrawClone s: saves[current-1]) try {
+                   shapes.add(s.clone());
+                   } catch (CloneNotSupportedException ex) {}  
            }
-           @Override
-           public void mouseEntered(MouseEvent e) {}
-           @Override
-           public void mouseExited(MouseEvent e) {}
-           @Override
-           public void mousePressed(MouseEvent e) {}
-           @Override
-           public void mouseClicked(MouseEvent e) {}
        });
+       setHandler(bmh);
     }
-    
-    private class MyShape implements Drawable{
+        @Override
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
+        for(DrawClone shape : shapes) shape.draw(g2);
+    }
+    private class MyShape extends DrawClone{
     public Shape shape;
     public Color MScolor = color;
     public Stroke MSstroke = new BasicStroke(stroke);
@@ -100,7 +119,7 @@ public class Canvas extends JPanel {
        g2.draw(shape);
     }
     }
-    private class MySelect implements Drawable{
+    private class MySelect extends DrawClone{
     public Rectangle2D area;
     private Stroke MSstroke = new BasicStroke(1, BasicStroke.CAP_BUTT,
             BasicStroke.JOIN_BEVEL, 1, new float[]{5, 5}, 0);
@@ -118,7 +137,7 @@ public class Canvas extends JPanel {
     
     }
 
-    private class MyString implements Drawable{
+    private class MyString extends DrawClone{
     public String MSstring = text;
     public Color MScolor = color;
     public Font MSfont = font;
@@ -135,7 +154,7 @@ public class Canvas extends JPanel {
             g2.drawString(MSstring, x, y);
         }
     }
-    private class MyImage implements Drawable{
+    private class MyImage extends DrawClone{
     public BufferedImage MIimage = image;
     public int width = image.getWidth();
     public int height = image.getHeight();
@@ -152,14 +171,10 @@ public class Canvas extends JPanel {
     }
  
  
-    @Override
-    public void paintComponent(Graphics g){
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g;
-        for (Drawable shape : shapes) shape.draw(g2);
-    }
-    
-    LinkedList<Drawable> shapes = new LinkedList<>();
+
+    boolean checkout = false;
+    LinkedList<DrawClone> shapes = new LinkedList<>();
+    LinkedList<DrawClone> temp = shapes;
     LinkedList<Path2D.Double> curves = new LinkedList<>();
     BrushMouseHandler bmh = new BrushMouseHandler();
     SprayMouseHandler smh = new SprayMouseHandler();
@@ -189,8 +204,11 @@ public class Canvas extends JPanel {
     BufferedImage image;
     JPanel col1;
     JPanel col2;
-    public void setPanels(JPanel c1,JPanel c2){
+    JButton backW;
+    JButton forW;
+    public void setComponents(JPanel c1,JPanel c2, JButton b, JButton f){
     col1=c1; col2=c2;
+    backW=b; forW=f;
     }
     //resize or move
     private boolean resize = true;
@@ -224,9 +242,7 @@ public class Canvas extends JPanel {
     repaint();
     }
     public void fill(){
-    shapes.clear();
     setBackground(color);
-    repaint();
     }
     
     public void setType(ToolType bt){
@@ -402,7 +418,7 @@ public class Canvas extends JPanel {
         @Override
         public void mousePressed(MouseEvent e) {
             Point p = e.getPoint();
-            Iterator<Drawable> i = shapes.descendingIterator();
+            Iterator<DrawClone> i = shapes.descendingIterator();
             Drawable shape;
             while(i.hasNext()){
             shape = i.next();
@@ -430,7 +446,6 @@ public class Canvas extends JPanel {
          if(resize) {
             int x = image.x;
             int y = image.y;
-            if(x<=0 || y<=0)return;
             int newWidth = p.x - x;
             int newHeight = p.y - y;
             if(newWidth<=0 || newHeight<=0) return;
@@ -532,7 +547,18 @@ public class Canvas extends JPanel {
           
           oldColor = newLook.getRGB(p.x, p.y);
           newColor = color.getRGB();
-          flood(p.x,p.y);
+          boolean[][] hits = new boolean[newLook.getWidth()][newLook.getHeight()];
+          Queue<Point> queue = new LinkedList<>();
+          queue.add(p);
+          while(!queue.isEmpty()){
+          p = queue.remove();
+          if(check(hits,p)){
+            queue.add(new Point(p.x,p.y-1));
+            queue.add(new Point(p.x,p.y+1));
+            queue.add(new Point(p.x-1,p.y));
+            queue.add(new Point(p.x+1,p.y));
+          }
+          }
           shapes.clear();
           image = newLook;
           shapes.add(new MyImage(0,0));
@@ -542,11 +568,13 @@ public class Canvas extends JPanel {
         @Override
         public void mouseDragged(MouseEvent e) {
         }
-        private void flood(int x, int y){
-           if(x<0 || x>=Canvas.this.getWidth() || y<0 || y>=Canvas.this.getHeight()) return;
-           if(newLook.getRGB(x, y) != oldColor) return;
-            newLook.setRGB(x, y, newColor);
-            flood(x,y-1); flood(x,y+1);flood(x-1,y); flood(x+1,y); 
+        private boolean check(boolean[][] hits, Point p){
+         if(p.x<0 || p.x>=Canvas.this.getWidth() || p.y<0 || p.y>=Canvas.this.getHeight()) return false;
+         if(hits[p.x][p.y])return false;
+         if(newLook.getRGB(p.x, p.y) != oldColor)return false;
+         newLook.setRGB(p.x, p.y, newColor);
+         hits[p.x][p.y]=true;
+         return true;
         }
     }
     private class TransformMouseHandler extends MouseHandler {
@@ -588,7 +616,6 @@ public class Canvas extends JPanel {
          if(resize) {
             int x = trImg.x;
             int y = trImg.y;
-            if(x<=0 || y<=0)return;
             int newWidth = p.x - x;
             int newHeight = p.y - y;
             if(newWidth<=0 || newHeight<=0) return;

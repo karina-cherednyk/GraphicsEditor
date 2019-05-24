@@ -9,12 +9,14 @@ package graphicredactor;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
 
@@ -29,6 +31,9 @@ public class GraphicRedactor extends javax.swing.JFrame {
      */
     public GraphicRedactor() {
         initComponents();
+        String[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+        for(String font: fonts)((DefaultComboBoxModel)fontBox.getModel()).addElement(font);
+        
     }
 
     /**
@@ -49,7 +54,7 @@ public class GraphicRedactor extends javax.swing.JFrame {
         openBut = new javax.swing.JButton();
         scaleBut = new javax.swing.JRadioButton();
         moveBut = new javax.swing.JRadioButton();
-        jRadioButton1 = new javax.swing.JRadioButton();
+        createBut = new javax.swing.JRadioButton();
         backward = new javax.swing.JButton();
         forward = new javax.swing.JButton();
         jToolBar1 = new javax.swing.JToolBar();
@@ -79,13 +84,13 @@ public class GraphicRedactor extends javax.swing.JFrame {
         fontBox = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
         fontSizeBox = new javax.swing.JComboBox();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        text = new javax.swing.JTextArea();
         textButton = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         styleBox = new javax.swing.JComboBox();
         paletteCopy = new javax.swing.JButton();
         colSampleCopy = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        text = new javax.swing.JTextArea();
         canvas = new Canvas();
 
         jMenuItem1.setText("jMenuItem1");
@@ -144,13 +149,19 @@ public class GraphicRedactor extends javax.swing.JFrame {
             }
         });
 
-        buttonGroup1.add(jRadioButton1);
-        jRadioButton1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        jRadioButton1.setSelected(true);
-        jRadioButton1.setText("create");
-        jRadioButton1.setToolTipText("");
+        buttonGroup1.add(createBut);
+        createBut.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        createBut.setSelected(true);
+        createBut.setText("create");
+        createBut.setToolTipText("");
+        createBut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createButActionPerformed(evt);
+            }
+        });
 
         backward.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/backward.png"))); // NOI18N
+        backward.setEnabled(false);
         backward.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 backwardActionPerformed(evt);
@@ -158,6 +169,8 @@ public class GraphicRedactor extends javax.swing.JFrame {
         });
 
         forward.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/forward.png"))); // NOI18N
+        forward.setEnabled(false);
+        ((Canvas)canvas).setComponents(colSample, colSampleCopy,backward,forward);
         forward.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 forwardActionPerformed(evt);
@@ -178,12 +191,12 @@ public class GraphicRedactor extends javax.swing.JFrame {
                     .addComponent(moveBut, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(scaleBut, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jRadioButton1)
+                .addComponent(createBut)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(backward)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(forward)
-                .addContainerGap(720, Short.MAX_VALUE))
+                .addContainerGap(496, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -198,7 +211,7 @@ public class GraphicRedactor extends javax.swing.JFrame {
                         .addGap(6, 6, 6)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(scaleBut)
-                            .addComponent(jRadioButton1))
+                            .addComponent(createBut))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(moveBut))
                     .addComponent(backward, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -263,6 +276,7 @@ public class GraphicRedactor extends javax.swing.JFrame {
         brushChooser.setBackground(new java.awt.Color(153, 153, 255));
         brushChooser.setMaximumRowCount(3);
         brushChooser.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "0", "1", "2" }));
+        brushChooser.setSelectedIndex(2);
         brushChooser.setToolTipText("");
         brushChooser.setMinimumSize(new java.awt.Dimension(100, 100));
         brushChooser.setName(""); // NOI18N
@@ -343,7 +357,7 @@ public class GraphicRedactor extends javax.swing.JFrame {
         colSample.setLayout(colSampleLayout);
         colSampleLayout.setHorizontalGroup(
             colSampleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 50, Short.MAX_VALUE)
+            .addGap(0, 63, Short.MAX_VALUE)
         );
         colSampleLayout.setVerticalGroup(
             colSampleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -351,7 +365,7 @@ public class GraphicRedactor extends javax.swing.JFrame {
         );
 
         fillCvs.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        fillCvs.setText("fill canvas");
+        fillCvs.setText("change background");
         fillCvs.setToolTipText("");
         fillCvs.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -373,25 +387,22 @@ public class GraphicRedactor extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(colSample, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(colSample, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(41, 41, 41)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(fillCvs, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(strokeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(clearCvs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(378, Short.MAX_VALUE))
+                    .addComponent(strokeSpinner)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(fillCvs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(clearCvs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(52, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(colSample, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
@@ -400,7 +411,8 @@ public class GraphicRedactor extends javax.swing.JFrame {
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(strokeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(clearCvs))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 10, Short.MAX_VALUE))
+                    .addComponent(colSample, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -449,7 +461,12 @@ public class GraphicRedactor extends javax.swing.JFrame {
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/font.png"))); // NOI18N
 
         fontBox.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        fontBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Times New Roman", "Arial", "Comic Sans MS", "Tahoma" }));
+        fontBox.setModel(new DefaultComboBoxModel());
+        fontBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fontBoxActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -463,19 +480,6 @@ public class GraphicRedactor extends javax.swing.JFrame {
                 fontSizeBoxActionPerformed(evt);
             }
         });
-
-        text.setColumns(20);
-        text.setFont(new java.awt.Font("Times New Roman", 0, 10)); // NOI18N
-        text.setRows(5);
-        text.setText("example");
-        text.setToolTipText("");
-        text.setRequestFocusEnabled(false);
-        text.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                textKeyPressed(evt);
-            }
-        });
-        jScrollPane1.setViewportView(text);
 
         textButton.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         textButton.setText("write text");
@@ -514,18 +518,26 @@ public class GraphicRedactor extends javax.swing.JFrame {
         colSampleCopy.setBackground(new java.awt.Color(0, 0, 0));
         colSampleCopy.setPreferredSize(new java.awt.Dimension(50, 50));
         colSampleCopy.setVerifyInputWhenFocusTarget(false);
-        ((Canvas)canvas).setPanels(colSample, colSampleCopy);
 
         javax.swing.GroupLayout colSampleCopyLayout = new javax.swing.GroupLayout(colSampleCopy);
         colSampleCopy.setLayout(colSampleCopyLayout);
         colSampleCopyLayout.setHorizontalGroup(
             colSampleCopyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 50, Short.MAX_VALUE)
+            .addGap(0, 62, Short.MAX_VALUE)
         );
         colSampleCopyLayout.setVerticalGroup(
             colSampleCopyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 48, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
+
+        text.setColumns(20);
+        text.setRows(5);
+        text.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                textKeyPressed(evt);
+            }
+        });
+        jScrollPane2.setViewportView(text);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -534,7 +546,7 @@ public class GraphicRedactor extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(fillBox)
-                .addGap(169, 169, 169)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -542,30 +554,31 @@ public class GraphicRedactor extends javax.swing.JFrame {
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(styleBox, 0, 64, Short.MAX_VALUE)
-                    .addComponent(fontSizeBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(styleBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(fontSizeBox, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(fontBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(textButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(fontBox, 0, 200, Short.MAX_VALUE)
+                    .addComponent(textButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(paletteCopy, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(colSampleCopy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(43, 43, 43))
+                .addComponent(colSampleCopy, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(336, 336, 336))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(paletteCopy, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(fillBox)
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(2, 2, 2)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(fontBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel4)
@@ -575,13 +588,12 @@ public class GraphicRedactor extends javax.swing.JFrame {
                                     .addComponent(fontSizeBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel1)
                                     .addComponent(textButton)))
-                            .addComponent(jLabel3)
-                            .addComponent(colSampleCopy, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(fillBox)
+                                .addComponent(jLabel3)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(colSampleCopy, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE))
                 .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(paletteCopy, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jToolBar2.add(jPanel1);
@@ -595,7 +607,7 @@ public class GraphicRedactor extends javax.swing.JFrame {
         canvas.setLayout(canvasLayout);
         canvasLayout.setHorizontalGroup(
             canvasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 1044, Short.MAX_VALUE)
         );
         canvasLayout.setVerticalGroup(
             canvasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -606,19 +618,19 @@ public class GraphicRedactor extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane2)
+            .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(canvas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(21, 21, 21))
+                .addComponent(canvas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(canvas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 81, Short.MAX_VALUE))
+                .addGap(0, 23, Short.MAX_VALUE))
         );
 
         pack();
@@ -696,11 +708,6 @@ public class GraphicRedactor extends javax.swing.JFrame {
         ((Canvas)canvas).setFill(fillBox.isSelected());
     }//GEN-LAST:event_fillBoxActionPerformed
 
-    private void textKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textKeyPressed
-        String currentText = text.getText();
-        ((Canvas)canvas).setText(currentText);
-    }//GEN-LAST:event_textKeyPressed
-
     private void openButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openButActionPerformed
     JFileChooser fc = new JFileChooser();
     int val = fc.showOpenDialog(null);
@@ -774,6 +781,18 @@ public class GraphicRedactor extends javax.swing.JFrame {
     private void forwardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_forwardActionPerformed
        ((Canvas)canvas).checkNext();
     }//GEN-LAST:event_forwardActionPerformed
+
+    private void createButActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButActionPerformed
+        ((Canvas)canvas).setType(ToolType.imageCreate);
+    }//GEN-LAST:event_createButActionPerformed
+
+    private void textKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textKeyPressed
+       ((Canvas)canvas).setText(text.getText());
+    }//GEN-LAST:event_textKeyPressed
+
+    private void fontBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fontBoxActionPerformed
+        prepareFont();
+    }//GEN-LAST:event_fontBoxActionPerformed
     private void prepareFont(){
        int size = Integer.parseInt(fontSizeBox.getModel().getSelectedItem().toString().trim());
        String fontStyle = styleBox.getModel().getSelectedItem().toString();
@@ -783,7 +802,7 @@ public class GraphicRedactor extends javax.swing.JFrame {
        else style = Font.BOLD;
        String fontName = fontBox.getModel().getSelectedItem().toString();
        Font f = new Font(fontName,style,size);
-        text.setFont(f);
+       text.setFont(f);
        ((Canvas)canvas).setTextFont(f);
     }
     /**
@@ -831,6 +850,7 @@ public class GraphicRedactor extends javax.swing.JFrame {
     private javax.swing.JPanel colSample;
     private javax.swing.JPanel colSampleCopy;
     private javax.swing.JButton copyBut;
+    private javax.swing.JRadioButton createBut;
     private javax.swing.JButton cutBut;
     private javax.swing.JButton eraseBut;
     private javax.swing.JCheckBox fillBox;
@@ -848,8 +868,7 @@ public class GraphicRedactor extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JTabbedPane jTabbedPane2;
